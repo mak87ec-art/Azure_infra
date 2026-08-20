@@ -20,7 +20,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: environments/preprod
+        working-directory: Environment/preprod
 
     steps:
       - name: Checkout code
@@ -66,7 +66,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: environments/preprod
+        working-directory: Environment/preprod
 
     steps:
       - name: Checkout code
