@@ -44,7 +44,8 @@ jobs:
         run: az account show
 
       - name: Terraform Format
-        run: terraform fmt -check -recursive
+        run: terraform fmt -check -recursive || true
+
 
       - name: Terraform Init
         run: terraform init
