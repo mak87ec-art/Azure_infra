@@ -100,7 +100,7 @@ pipeline {
                             az account set \
                               --subscription "$AZURE_SUBSCRIPTION_ID"
 
-                            terraform init
+                            terraform init -reconfigure
                         '''
                     }
                 }
