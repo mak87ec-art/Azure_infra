@@ -5,13 +5,51 @@ pipeline {
 
     stages {
 
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Agent Test') {
             steps {
-                sh 'hostname'
-                sh 'whoami'
-                sh 'terraform --version'
-                sh 'az --version'
-                sh 'git --version'
+                sh '''
+                    echo "Hostname:"
+                    hostname
+
+                    echo "User:"
+                    whoami
+
+                    echo "Terraform:"
+                    terraform --version
+
+                    echo "Azure CLI:"
+                    az --version
+                '''
+            }
+        }
+
+        stage('Azure Login') {
+            steps {
+                withCredentials([
+                    azureServicePrincipal(
+                        credentialsId: 'Azure-SP',
+                        subscriptionIdVariable: 'ARM_SUBSCRIPTION_ID',
+                        clientIdVariable: 'ARM_CLIENT_ID',
+                        clientSecretVariable: 'ARM_CLIENT_SECRET',
+                        tenantIdVariable: 'ARM_TENANT_ID'
+                    )
+                ]) {
+                    sh '''
+                        az login \
+                          --service-principal \
+                          --username "$ARM_CLIENT_ID" \
+                          --password "$ARM_CLIENT_SECRET" \
+                          --tenant "$ARM_TENANT_ID"
+
+                        az account show
+                    '''
+                }
             }
         }
 
